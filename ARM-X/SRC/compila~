@@ -1,0 +1,27 @@
+
+#clean
+rm -f *.x *.o
+
+
+#compilaRR2014 intra P3HT s/ pbc 
+gfortran -c modulos.f90 arm-intra-p3ht.f90 
+gfortran -o arm-intra-p3ht.x modulos.o arm-intra-p3ht.o
+
+#compilaRR2014 P3HT x C60 
+gfortran -c modulos.f90 arm-pbc-p3ht+c60.f90 
+gfortran -o arm-pbc-p3ht+c60.x modulos.o arm-pbc-p3ht+c60.o
+
+#compilaRR2014 intra P3HT s/ pbc 
+gfortran -c modulos.f90 folding.f90 
+gfortran -o folding.x modulos.o folding.o
+
+#compilaRR2014 intra P3HT c/ pbc 
+gfortran -c modulos.f90 arm-pbc-p3ht.f90 
+gfortran -o arm-pbc-p3ht.x modulos.o arm-pbc-p3ht.o
+
+#RR2014 compila p3ht+c60 : gera celula
+gfortran -c modulos.f90 arm-getcell.f90 
+gfortran -o arm-getcell.x modulos.o arm-getcell.o
+
+
+rm -f *.o

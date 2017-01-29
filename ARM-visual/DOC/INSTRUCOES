@@ -1,0 +1,226 @@
+READ-ME // RR. nanomol - 2011.
+
+==============================================================================
+******************************************************************************
+* versão anterior: ARM - statistical.v8 // 
+         
+         RR. fev.2010 ## analises estatísticas.
+
+
+* versão anterior:    ARM - statistical.v9 // 
+ 
+         RR. mar.2011 ## v8 + produção de mapas em redes topológicas.
+
+* versão atual:     ARM-v10.1
+         RR. set.2011 - nov.2011
+  ATENCAO: ESTE MANUAL NESTE MOMENTO ESTAH DESATUALIZADO
+
+==============================================================================
+******************************************************************************
+
+CONFIGURAÇÃO: 
+
+coloque o diretorio ARM-10.1 na sua raiz, e tambem coloque no .bashrc:
+PATH:$PATH:./ARM-v10.1
+
+====
+
+
+=======
+Rodando
+=======
+=========================
+
+
+A) Separando arquivos [spread]
+=============================
+
+Separa arquivos de cada passo térmico, e, dentro desses, ainda separa em
+arquivos para cadeias independentes (chains), e cadeias para cadeias sem os
+átomos de H.
+
+1. coloca os arquivos.pdb no diretório analisa.
+2. edita o arquivo info (todos os átomos) e info2 (átomos de carbono somente)
+3. executa spread
+
+
+B) Gerando analise estatistica [stat]
+==============================
+
+ B.1) De configurações individuais
+
+  1. Dentro da pasta de um frame/configuração/morfologia (P3V2/P3V2DIR/1)
+
+     arquivos:
+
+     I) gerados na separação [passo (A)] (diretórios)
+     	* chains  
+     	* chainsout  
+
+     II) criar os arquvios com informações estruturais:
+
+        * chains.in - lista de cadeias a serem analisadas, 
+                      presentes no dir. chainsout.
+        * info.stat - exemplo: filme de P3V2 com 384 cadeias
+  	      22    [natol]      - numero de atomos de carbono de um oligomero  
+	      384   [ncadeias]   - numero de cadeias 
+	      3     [naneisolig] - numero de aneis por oligomero
+	      16.0  [Lplanar]    - comprimento de cadeia ideal esticada
+
+  
+        * MAT.in    - vetores da celula unitaria em angstrom.
+
+     Basta executar 
+     > stat
+
+     Os arquivos gerados são .dat 
+     [ver descrição das saídas do programa statistical.v8]
+     
+
+ B.2) Do Ensemble de configurações
+
+     << escrever >>
+
+
+C) Utilizando ferramentas de visualização
+=========================================
+
+
+ C.1. Gerando arquivos de centros (necessário para o prox. passo).
+     Executa:
+     > brk [opção: -pbc] 
+
+     Isso gera diretorio centros, com as traduções de posições de centros
+     para arquivos individuais que serão utilizados na visualização (esferas).
+     
+     opção -pbc: define se os mapas (próximos passos) usarão visualizações de
+     ONECELL (c/ pbc), ou o DEFAULT.
+
+ C.2. Visualizando.
+
+     I) checar com visual python descrição de cadeias isoladamente
+
+     	Entra no diretório centros e executa
+ 
+	> chk N.da cadeia
+
+     II) checa conjunto de cadeias
+
+     	Entra no diretório centros, produz um arquivo  chainsplot.in com as
+     	cadeias que querem ser visualizadas. E executa:
+
+	> chka [opção: atoms/map/all] 
+
+	  atoms: representa apenas átomos
+	  map  : representa apenas mapa matemático (centros e vetores entre
+	         centros de uma mesma cadeia e spin)
+	  all  : ambas as alternativas anteriores.
+
+          *OBS: a representação dos átomos não tem a pbc aplicados sobre eles,
+                apenas sobre os centros vale a pbc. 
+
+
+
+=====================================
+=====================================
+
+DESCRIÇÃO DOS OUTPUTS DO PROGRAMA DE ANALISE ESTATISTICA 
+
+AngAneis_v9.0_pbc_beta.f90 // rr.mar.2011
+
+
+observacoes: 
+* o vetor normal do anel será apelidado de "spin"
+* o anel é mapeado em seu "centro", palavra utilizada em substituição
+* pbc = periodic boundary condiction
+
+
+1) all.vec.rg.dat // informacao estrutural do mapa centros+spin s/pbc
+
+cadeia, anel, centro(x,y,z), normal(x,y,z)
+
+
+
+2) all.vec.rg-pbc.dat // idem ao 1) porem com pbc.
+
+
+
+3) intra.vec.1nb.dat // vetores que unem dois aneis consecutivos dentro da cad.
+
+cadeia, anel, e vetor que chega no proximo anel da mesma cadeia (o ultimo anel
+recebe vetor nulo).
+
+
+
+4) intra.dist-rg.dat // distancias intra-cadeia entre centros todos c/ todos
+
+cadeia, anel, anel, distancia
+
+
+
+5) intra.lin-ete.dat // linearidade da cadeia (Kuhn factor)
+
+cadeia, linearidade = dist-ponta-ponta / comprimento-na-geom.planar
+
+
+
+6) intra.anis.dat // idem ao 3), porem com os vetores normalizados - avaliacao
+da anisotropia.
+
+cadeia, anel, vetor anel-anel consecutivos normalizado (ultimo c/ vetor nulo)
+
+
+
+7) intra.ang-sg.dat // angulo entre dois segmentos de cadeia adjacentes
+
+cadeia, anel, cadeia (mesma), anel (prox), angulo
+
+
+
+8) intra.ang-rg.dat // angulos entre dois centros adjacentes
+
+cadeia, anel, anel (prox), angulo(spin-spin) (eta),
+angulo(spin-v(centro,centro)), contador-rotulo de comprimentos conjugados.
+
+
+9) intra.conj.dat // segmentos conjugados: descricao.
+
+* regra da conjugacao: angulo entre aneis adjacentes menor que 60deg.
+
+cadeia, anel, sitio, comprimento de conjug. do sitio
+
+
+10) inter.dist-rg.dat // distancia entre centros de aneis de cad. diferentes.
+
+cadeia, anel, cadeia, anel, distancia
+
+
+11) inter.ang-rgsg.dat // angulos inter_cadeia dentro de um raio de corte,
+default = 4.0 angstrom.
+
+cadeia, anel, cadeia, anel, angulo(spin-spin), angulo(spin-v(centro,centro)) 
+
+
+12) redetopologica-det.dat  // descreve que aneis pertencententes a que
+cadeias e a que sitios e que estao ligados na rede topologica, listando suas
+distancias e angulos relativos.
+
+*sitio: trecho de comprimento conjugado de uma cadeia.
+
+cadeia, anel, sitio, cadeia, anel, sitio, distancia, angulo entre aneis,
+angulo entre vetor que une aneis e normal de um anel, idem para o outro.
+
+
+13) mobili.input  // input para o prog. mobili // sitios ligados com:
+
+sitio1,  sitio2, distancia, vetor que os une .dot. Campo (E). integrais de transferencia, diferenca de energias de sitio.
+
+
+* fazer (V9*/quinta) - tirar o prod. escalar pelo campo (serah feito fora), e
+  imprimir simplesmente o (Rx,Ry,Rz)
+
+sitio1,  sitio2, distancia, vetor unitario entre aneis (x,y,z),integrais de transferencia, diferenca de energias de sitio.
+
+
+>> importante: fazer sort -n mobili.input > mobili.input-sort, e usar no
+               programa mobili o arquivo ordenado (mobili.input-sort)

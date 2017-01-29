@@ -1,0 +1,5 @@
+P3HT             #diretorio a ser gerado
+nvt-step-       #prefixo dos arquivos
+100                #n. de snapshots
+752 0          #n. de atms
+50  0        #n. de moleculas

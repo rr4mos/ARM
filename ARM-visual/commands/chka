@@ -1,0 +1,3 @@
+srcv=/home/rramos/ARM-visual/visual.v3
+$srcv/checkoutvALL.py $1 chainsplot.in
+

@@ -1,0 +1,4 @@
+#compila intra P3HT s/ pbc 
+gfortran -c modulos.f90 arm-intra-p3ht.f90 
+gfortran -o arm-intra-p3ht.x modulos.o arm-intra-p3ht.o
+

@@ -1,0 +1,2 @@
+srcv=/home/rramos/ARM-visual/visual.v3
+$srcv/checkoutv.py $1
