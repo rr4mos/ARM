@@ -1,0 +1,45 @@
+
+#clean
+rm -f *.x *.o
+
+#compila intra s/ pbc -- phenyl-phenyl
+gfortran -c modulos.f90 arm-intra.f90 
+gfortran -o arm-intra.x modulos.o arm-intra.o
+
+#compila intra C60 s/ pbc -- tiol-tiol
+gfortran -c modulos.f90 arm-intra-t2.f90 
+gfortran -o arm-intra-t2.x modulos.o arm-intra-t2.o
+
+#compila intra C60 s/ pbc -- tiol-tiol
+gfortran -c modulos.f90 arm-nopbc-c60.f90 
+gfortran -o arm-nopbc-c60.x modulos.o arm-nopbc-c60.o
+
+#compila intra P3HT s/ pbc 
+gfortran -c modulos.f90 arm-intra-p3ht.f90 
+gfortran -o arm-intra-p3ht.x modulos.o arm-intra-p3ht.o
+
+#compila intra s/ pbc com operacao de lista -- phenyl-phenyl
+gfortran -c modulos.f90 arm-intra-selct.f90 
+gfortran -o arm-intra-selct.x modulos.o arm-intra-selct.o
+
+#compila pbc -- phenyl-phenyl
+gfortran -c modulos.f90 arm-pbc-PP.f90 
+gfortran -o arm-pbc-PP.x modulos.o arm-pbc-PP.o
+
+#compila pbc -- phenyl-phenyl
+gfortran -c modulos.f90 arm-pbc-p3ht.f90 
+gfortran -o arm-pbc-p3ht.x modulos.o arm-pbc-p3ht.o
+
+#compila pbc -- phenyl-vinyl
+gfortran -c modulos.f90 arm-pbc-PV.f90 
+gfortran -o arm-pbc-PV.x modulos.o arm-pbc-PV.o
+
+#compila pbc -- phenyl-vinyl
+gfortran -c modulos.f90 arm-pbc-p3ht+c60.f90 
+gfortran -o arm-pbc-p3ht+c60.x modulos.o arm-pbc-p3ht+c60.o
+
+#compila trans 
+gfortran -c modulos.f90 arm-trans.f90 
+gfortran -o arm-trans.x modulos.o arm-trans.o
+
+rm -f *.o

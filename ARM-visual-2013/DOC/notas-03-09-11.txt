@@ -1,0 +1,168 @@
+Descricao Programa ARM
+
+input:
+
+natol          !numero de atomos de um oligomero  
+ncadeias       !numero de cadeias 
+naneisolig     !numero de aneis por oligomero
+Lplanar        !Comprimento de uma cadeia linear
+
+vetores da célula unitaria
+
+Reconhece tipo de atomo e lê coordenadas xyz do arquivo-filme.pdb
+
+
+
+####################################
+Para as cadeias que compoem o filme:
+####################################
+
+1 - Calcula os centros de todos os anéis
+
+2 - Calcula os vetores normais de todos os aneis.
+
+arquivo: all.vec.rg.dat
+
+     l,    m, xm(l,m), ym(l,m), zm(l,m),v_normal(l,m)
+cadeia, anel,   xyz-centro             ,normal
+
+####################
+####################
+####################
+Cálculos Intracadeia
+#####################################
+3 - Calcula distância entre centros dos anéis intracadeia.
+
+arquivo:intra.dist-rg.dat
+
+l     ,    m,    o, R(l,m,l,o)
+cadeia, anel, anel, distância
+
+
+
+#####################################
+4 - Calcula linearidade end-to-end em relação a cadeia planar.
+
+arquivo: intra.lin-ete.dat
+
+l     , R(l,1,l,ultimo-anel)/cadeia linear 
+cadeia, linearidade
+
+
+
+#####################################
+5 - Calcula angulo entre anéis intracadeia.
+  - Define sitio. Os anéis pertencem ao mesmo síto enquanto phi<60º (ângulo entre aneis).
+
+arquivo: intra.ang-rg.dat
+
+     l,    m,          tau,                   lambda, sitio(l,m)
+
+cadeia, anel, angulo-torcao-aneis, angulo entre eixos, indice do sitio
+
+
+#####################################
+6 - Calcula o comprimento do sítio.
+
+arquivo: intra.conj.dat
+
+     l,    m,      sitio(l,m),     conjuga(l,m)
+
+cadeia, anel, indice de sitio, tamanho do sitio
+
+
+
+
+
+
+
+
+####################
+####################
+####################
+Cálculos Intercadeia
+#####################################
+7 - Centro dos aneis e vetor normal intercadeia
+
+arquivo:  all.vec.rg-pbc.dat
+
+     l,    m, xm(l,m), ym(l,m), zm(l,m),v_normal(l,m)
+cadeia, anel,   xyz-centro             ,normal
+
+
+#####################################
+8 - Calcula distancia entre centro de aneis intercadeias.
+
+arquivo: inter.dist-rg.dat
+
+     l,    m,       n,    o,      R(l,m,n,o)
+     
+cadeia, anel,  cadeia, anel, Distancia-aneis
+
+
+Qual distancia deve ser considerada?
+
+limR     = 5.5  ! raio de corte para avaliar angulos entre-aneis e hopping e etc.
+
+
+#####################################
+9 - Calcula distância entre centros dos anéis intercadeia.
+
+arquivo:  anelanel.dat
+
+R(l,m,n,o),phi,theta1,theta2
+
+
+
+#####################################
+10 - Calcula distancia, angulo entre anéis e
+ angulos (vetor normal - vetor centro) dos aneis de sitios intercadeias.
+
+arquivo: inter.ang-rgsg.dat
+
+     l,    m,       n,    o,      R(l,m,n,o),          phi,                   theta1,                   theta2  
+     
+cadeia, anel,  cadeia, anel, Distancia-aneis, angulo-aneis, normal-distancia-centros, normal-distancia-centros
+
+
+
+#####################################
+
+Os vinculos para R e angulos são impostos e o hopping e a energia de sitios sao calculados.
+
+#####################################
+11 - Para sítios distintos calcula menor distancia entre aneis, angulo entre aneis e vetores normal-distancia_centros.
+
+arquivo: redetopologica-det.dat
+
+     l,    m,      sitio(l,m),      n,    o,      sitio(n,o),      R(l,m,n,o),          phi,                   theta1,                   theta2
+   
+cadeia, anel, indice de sitio, cadeia, anel, indice de sítio, Distancia-aneis, angulo-aneis, normal-distancia-centros, normal-distancia-centros
+
+
+#####################################
+12 - Calcula distância entre centros dos anéis intercadeia.
+
+arquivo:  mobili.input
+
+sitio(l,m)     ,     sitio(n,o),      R(l,m,n,o),            anelanel,    hpp,(SITEENERGY(conjuga(l,m))-SITEENERGY(conjuga(n,o)))
+
+indice de sitio,indice de sitio, menor distancia, xyz vetor distancia,hopping, variação nas energias de sitio.
+
+
+Depois de gerado o mobili.input (dentro do diretorio P3V2DIR/1) executar:
+
+python ../../SRC/ajmobmax.py
+
+gerado o arquivo mobilimax.input
+
+copiar mobilimax.input para input.txt
+
+copiar o input.txt para o diretorio onde esta o mobili,
+
+editar o aquivo mobili.in e executar:
+
+./mobili.ex
+
+plot com:
+xmgrace mobili.dat

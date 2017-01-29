@@ -1,0 +1,18 @@
+READ XY "./005/P26V25STR/Rgm.dat"
+HISTOGRAM (S0, MESH(0, 50, 51), OFF, OFF)
+
+READ XY "./110/P26V25STR/Rgm.dat"
+HISTOGRAM (S2, MESH(0, 50, 51), OFF, OFF)
+
+READ XY "./210/P26V25STR/Rgm.dat"
+HISTOGRAM (S4, MESH(0, 50, 51), OFF, OFF)
+
+## cleaning
+
+G0.S0  HIDDEN TRUE
+G0.S2  HIDDEN TRUE
+G0.S4  HIDDEN TRUE
+
+# writing output
+#WRITE G0.S1  FILE "hist-intra.lin.dat"
+#WRITE G0.S42 FILE "dev-intra.lin.dat"

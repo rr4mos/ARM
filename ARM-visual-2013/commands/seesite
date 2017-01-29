@@ -1,0 +1,5 @@
+srcv=/home/rramos/ARM-visual/visual.v3
+$srcv/seesitesv2.py $1 $2
+
+
+
